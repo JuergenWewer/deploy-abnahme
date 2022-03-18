@@ -1,2 +1,0 @@
-- name: Install elk
-  import_tasks: ./DRelk.yml
