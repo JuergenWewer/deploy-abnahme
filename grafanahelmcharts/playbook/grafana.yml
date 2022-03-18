@@ -2,7 +2,7 @@
   kubernetes.core.helm:
     name: grafana
     namespace: kube-system
-    chart_ref: ../charts/grafana
+    chart_ref: ../grafanahelmcharts/charts/grafana
     kubeconfig_path: "{{ kubeconfig }}"
     create_namespace: True
     wait: true
