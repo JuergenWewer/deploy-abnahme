@@ -6,7 +6,7 @@
   tasks:
     - name: Get all dirs
       find:
-        paths: /tmp/deploymentrepository
+        paths: /tmp/deploy-abnahme
         file_type: directory
       register: result_of_find
 
