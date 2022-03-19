@@ -14,4 +14,5 @@
     kubeconfig_path: "{{ kubeconfig }}"
     create_namespace: True
     wait: true
-    values_files: ../yuuvisvapi/values-abnahme.yaml
+    force: true
+    values_files: ../yuuvisvapi/values.yaml
