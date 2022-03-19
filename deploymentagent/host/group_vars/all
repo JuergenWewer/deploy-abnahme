@@ -5,7 +5,7 @@ persistentvolumeslist: ./persistentvolumes/macpro/list
 pvs: persistentvolumes/pvs-macpro.yml
 pvsdir: ./playbooks/persistentvolumes/macpro
 hostIP: 192.168.178.77
-serverurl: 192.168.178.77
+serverurl: http://192.168.178.77:30036
 keystorecn: 192.168.178.77
 hostPort: 30080
 nfsserver: 192.168.178.77
