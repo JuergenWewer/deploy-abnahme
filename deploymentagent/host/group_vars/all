@@ -4,12 +4,12 @@ mountdirs: ./nfs/mountdirs-macpro
 persistentvolumeslist: ./persistentvolumes/macpro/list
 pvs: persistentvolumes/pvs-macpro.yml
 pvsdir: ./playbooks/persistentvolumes/macpro
-hostIP: 192.168.178.77
-serverurl: http://192.168.178.77
+hostIP: 192.168.178.91
+serverurl: http://192.168.178.91
 serverport: 30036
-keystorecn: 192.168.178.77
+keystorecn: 192.168.178.91
 hostPort: 30080
-nfsserver: 192.168.178.77
+nfsserver: 192.168.178.91
 nfssecret: csiraidsecret-key
 nfsbackup: false
 nfsprovisionerpath: /mnt/optimal/nfs-csi-provisioner
@@ -37,7 +37,7 @@ miniopersistencesize: 10Gi
 miniopersistenceenabled: true
 minioazuregatewayenabled: false
 redismasterpersistencestorageClass: managed-nfs-raid-storage
-keycloakAddress: 192.168.178.77:30111
+keycloakAddress: 192.168.178.91:30111
 yuuvisgitpassword: optimalsystem
 yuuvisamqppassword: optimalsystem
 yuuvisdbpassword: optimalsystem
@@ -74,7 +74,7 @@ bpmenginedatabasepassword: optimalsystem
 bpmenginedatabaseprivilegepassword: optimalsystem
 renditionyuuvisrenditionservicedockerImage: docker.yuuvis.org/yuuvis/renditionservice:2.1.2
 renditionyuuvisrenditionrepositorydockerImage: docker.yuuvis.org/yuuvis/rendition-repository:1.0.2
-managementapitmclientrooturl: https://192.168.178.77
+managementapitmclientrooturl: https://192.168.178.91
 managementmanagementconsoleapiconfigdbpassword: optimalsystem
 managementmanagementconsoleapiconfigdbprivilegeuser: postgres
 managementmanagementconsoleapiconfigdbprivilegepassword: optimalsystem

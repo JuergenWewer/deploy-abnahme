@@ -1,6 +1,7 @@
 #deployment repository
 
-store the kubernetes admin.conf for the cluster in deploymentagent/admin.conf
+store the kubernetes admin.conf for the cluster in deploymentagent/admin.conf:
+cp /Users/wewer/.kube/master/etc/kubernetes/admin.conf /Users/wewer/workspace/deploy-abnahme/deploymentagent/admin.conf
 configure deployment repository in:
 
 deploymentagent/playbooks.yaml
