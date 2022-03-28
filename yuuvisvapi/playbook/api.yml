@@ -15,4 +15,7 @@
     create_namespace: True
     wait: true
     force: true
-    values_files: ../yuuvisvapi/values.yaml
+    values:
+      api:
+        serverurl: "{{ serverurl }}"
+        serverport: "{{ serverport }}"
