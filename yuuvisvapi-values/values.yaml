@@ -1,5 +1,9 @@
 # Default values for api.
 # This is a YAML-formatted file.
+username: prosozTest
+password: sd43wGFds32(%1
+yuuvisusername: prosoz
+yuuvispassword: Freund_$$
 serverurl: http://192.168.178.91
 serverport: 30036
 tenant: yuuvistest
@@ -9,3 +13,5 @@ selfsignedcertificate: true
 keystorecn: 192.168.178.91
 keystorepath: yuuviskeystoremacpro.jks
 keystorepassword: secret
+
+
