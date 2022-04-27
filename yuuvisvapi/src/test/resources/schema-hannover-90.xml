@@ -12,17 +12,17 @@
   <id>eaktenid</id>
   <propertyType>string</propertyType>
   <cardinality>single</cardinality>
-  <required>true</required>
-  <maxLength>30</maxLength>
-  <minLength>3</minLength>
+  <required>false</required>
+  <maxLength>100</maxLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>edokumentenid</id>
   <propertyType>string</propertyType>
   <cardinality>single</cardinality>
-  <required>true</required>
-  <maxLength>30</maxLength>
-  <minLength>3</minLength>
+  <required>false</required>
+  <maxLength>100</maxLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>sachbearbeiter</id>
@@ -38,7 +38,7 @@
   <propertyType>string</propertyType>
   <cardinality>single</cardinality>
   <required>true</required>
-  <maxLength>30</maxLength>
+  <maxLength>100</maxLength>
   <minLength>3</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
@@ -47,7 +47,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>50</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>vorname</id>
@@ -55,7 +55,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>100</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>nachname</id>
@@ -63,7 +63,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>100</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyDateTimeDefinition>
   <id>geburtsdatum</id>
@@ -77,8 +77,8 @@
   <propertyType>string</propertyType>
   <cardinality>single</cardinality>
   <required>false</required>
-  <maxLength>30</maxLength>
-  <minLength>3</minLength>
+  <maxLength>100</maxLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>vornameAntragsteller</id>
@@ -86,7 +86,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>100</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>nachnameAntragsteller</id>
@@ -94,7 +94,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>100</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyDateTimeDefinition>
   <id>geburtsdatumAntragsteller</id>
@@ -108,8 +108,8 @@
   <propertyType>string</propertyType>
   <cardinality>single</cardinality>
   <required>false</required>
-  <maxLength>30</maxLength>
-  <minLength>3</minLength>
+  <maxLength>100</maxLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>vornameUnterhaltspflichtiger</id>
@@ -117,7 +117,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>100</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>nachnameUnterhaltspflichtiger</id>
@@ -125,7 +125,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>100</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyDateTimeDefinition>
   <id>geburtsdatumUnterhaltspflichtiger</id>
@@ -139,8 +139,8 @@
   <propertyType>string</propertyType>
   <cardinality>single</cardinality>
   <required>false</required>
-  <maxLength>30</maxLength>
-  <minLength>3</minLength>
+  <maxLength>100</maxLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyDateTimeDefinition>
   <id>archivdatum</id>
@@ -174,7 +174,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>8000</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>register</id>
@@ -182,7 +182,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>200</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>registertyp</id>
@@ -190,7 +190,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>200</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>dokumenttyp</id>
@@ -198,7 +198,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>200</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>vorlage</id>
@@ -206,7 +206,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>200</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyDateTimeDefinition>
   <id>erstelldatum</id>
@@ -221,7 +221,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>200</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>vornamesachbearbeiter</id>
@@ -229,7 +229,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>200</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>nachnamesachbearbeiter</id>
@@ -237,7 +237,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>200</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>kennungempfaenger</id>
@@ -245,7 +245,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>200</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>vornameempfaenger</id>
@@ -253,7 +253,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>200</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>nachnameempfaenger</id>
@@ -261,7 +261,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>200</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>vornameKlient</id>
@@ -269,7 +269,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>200</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>nachnameKlient</id>
@@ -277,7 +277,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>200</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyDateTimeDefinition>
   <id>geburtsdatumKlient</id>
@@ -292,7 +292,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>200</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>dateiname</id>
@@ -300,7 +300,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>200</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>adresseKlient</id>
@@ -308,7 +308,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>200</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>adresse</id>
@@ -316,7 +316,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>2000</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <propertyStringDefinition>
   <id>idempfaenger</id>
@@ -324,7 +324,7 @@
   <cardinality>single</cardinality>
   <required>false</required>
   <maxLength>200</maxLength>
-  <minLength>3</minLength>
+  <minLength>0</minLength>
 </propertyStringDefinition>
 <typeDocumentDefinition>
   <id>fallakteneodokument</id>

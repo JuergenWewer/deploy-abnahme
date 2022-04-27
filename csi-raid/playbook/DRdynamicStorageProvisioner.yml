@@ -6,6 +6,7 @@
     kubeconfig_path: "{{ kubeconfig }}"
     create_namespace: True
     wait: true
+    force: true
     values:
       csiraid:
         nfs:

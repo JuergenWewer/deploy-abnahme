@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.*;
 class ExternalCondition {
 
   static public boolean local() {
-    return false;
+    return true;
   }
 
 }
@@ -34,22 +34,27 @@ public class ApiVerticleTest {
 
   static private String apiurl;
   static private int apiport;
-  private boolean ssl = true;
+  static private String yuuvisurl;
+  static private int yuuvisport;
+  private boolean ssl = false;
   private boolean selfSignCertificate = true;
   private CountDownLatch producerReadyLatch = new CountDownLatch(1);
   private static Vertx vertx = Vertx.vertx();
-  private String user= "yuuvis";
-  private String pwd = "optimalsystem";
+  private String user= "prosozTest";
+  private String pwd = "sd43wGFds32(%1";
 
   @Test
   @BeforeAll
   static public void setClusterIP() {
     System.out.println("set the local variables");
+    yuuvisurl = "192.168.178.91";
+    yuuvisport = 30080;
+
     if (ExternalCondition.local()) {
       apiurl = "localhost";
       apiport = 8080;
     } else {
-      apiurl = "10.211.55.4";
+      apiurl = "192.168.178.91";
       apiport = 30036;
     }
   }
@@ -57,19 +62,19 @@ public class ApiVerticleTest {
   @BeforeEach
   void deploy_verticle(VertxTestContext testContext) throws Exception {
     Map<String,String> newEnv = new HashMap<>();
-    newEnv.put("AUTHENTICATION_SERVICE_HOST", "10.211.55.4");
-    newEnv.put("AUTHENTICATION_SERVICE_PORT", "30080");
+    newEnv.put("AUTHENTICATION_SERVICE_HOST", yuuvisurl);
+    newEnv.put("AUTHENTICATION_SERVICE_PORT", Integer.toString(yuuvisport));
     newEnv.put("TENANT", "yuuvistest");
     newEnv.put("SERVERURL", apiurl + ":" + apiport);
-    newEnv.put("USER", "yuuvis");
-    newEnv.put("PASSWORD", "optimalsystem");
+    newEnv.put("USER", user);
+    newEnv.put("PASSWORD", pwd);
     newEnv.put("YUUVISUSER", "root");
     newEnv.put("YUUVISPASSWORD", "optimalsystem");
     if (ssl) {
       newEnv.put("SSLENABLED", "true");
       if (selfSignCertificate) {
         newEnv.put("SELFSIGNEDCERTIFICATE", "true");
-        newEnv.put("KEYSTORECN", "10.211.55.4");
+        newEnv.put("KEYSTORECN", "192.168.178.91");
         newEnv.put("KEYSTOREPASSWORD", "secret");
       } else {
         newEnv.put("SELFSIGNEDCERTIFICATE", "false");
@@ -278,6 +283,8 @@ public class ApiVerticleTest {
         .sendJsonObject(klientAkte)
         .onComplete(
           testContext.succeeding(buffer -> testContext.verify(() -> {
+            System.out.println("responseStatusMessage: " + buffer.statusMessage());
+            System.out.println("responseBody: " + buffer.bodyAsString());
             if (!responseStatusMessage.isEmpty()) {
               assertThat(buffer.statusMessage()).isEqualTo(responseStatusMessage);
             }
@@ -414,6 +421,7 @@ public class ApiVerticleTest {
     if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
       System.out.println("start the webclient: testKlientakteGET");
       String endPoint = "/api/Klientakte/Klientid";
+      endPoint = "/api/Klientakte/9d0b0618-c3ed-4cb2-97b1-663c320814fa";
       int responseStatusCode = 200;
       String responseStatusMessage = "";
       String responseBody = "";
@@ -426,6 +434,7 @@ public class ApiVerticleTest {
     if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
       System.out.println("start the webclient: testKlientaktePOST");
       JsonObject klientAkte = getKlientakte();
+      klientAkte = new JsonObject(" {\"klient\":{\"id\":\"9d0b0618-c3ed-4cb2-97b1-663c320814fa\",\"vorname\":\"Hans\",\"nachname\":\"Xtremepyrd\",\"geburtsdatum\":\"31.03.2021\",\"adresse\":\"\"},\"archivieren\":\"false\",\"archivierenDatum\":\"\",\"loeschen\":\"false\",\"loeschenDatum\":\"\",\"eaktenID\":\"\"}");
       String endPoint = "/api/Klientakte";
       int responseStatusCode = 200;
       String responseStatusMessage = "";
@@ -439,7 +448,7 @@ public class ApiVerticleTest {
     if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
       System.out.println("start the webclient: testKlientaktePOST");
       JsonObject klientAkte = getKlientakte();
-      klientAkte.put("vorname","Jürgen");
+      klientAkte.put("vorname","JürgenTest");
       String endPoint = "/api/Klientakte";
       int responseStatusCode = 200;
       String responseStatusMessage = "";
@@ -452,16 +461,20 @@ public class ApiVerticleTest {
 
   private JsonObject getKlientakte() {
     JsonObject klientAkte = new JsonObject();
-    klientAkte.put("vorname","vorname");
-    klientAkte.put("nachname","nachname");
-    klientAkte.put("geburtsdatum","2003-02-18");
-    klientAkte.put("id","Klientid");
-    klientAkte.put("vornameUnterhaltspflichtiger","vornameUnterhaltspflichtiger");
-    klientAkte.put("adresse","adresse");
-    klientAkte.put("archivdatum","2024-02-18");
-    klientAkte.put("loeschdatum","2024-02-18");
+    JsonObject klient = new JsonObject();
+    klient.put("id",UUID.randomUUID().toString());
+    klient.put("vorname","vorname");
+    klient.put("nachname","nachname");
+    klient.put("geburtsdatum","18.02.2003");
+    klient.put("adresse","adresse");
+
+    klientAkte.put("klient",klient);
     klientAkte.put("archivieren","true");
+    klientAkte.put("archivdatum","18.02.2003");
     klientAkte.put("loeschen","false");
+    klientAkte.put("loeschdatum","18.02.2003");
+    klientAkte.put("eaktenID","");
+
     return klientAkte;
   }
 
@@ -520,15 +533,15 @@ public class ApiVerticleTest {
 
   private JsonObject getFallakte() {
     JsonObject fallAkte1 = new JsonObject();
-    fallAkte1.put("eAktenID","eAktenID1234");
+    fallAkte1.put("eaktenID","");
     JsonObject vorgang = new JsonObject();
     vorgang.put("aktenzeichen","aktenzeichenValue");
     vorgang.put("archivieren","true");
-    vorgang.put("archivierenDatum","2021-02-18");
+    vorgang.put("archivierenDatum","31.03.2002");
     vorgang.put("bemerkung","bemerkungValue");
     vorgang.put("id","Akte2");
     vorgang.put("loeschen","false");
-    vorgang.put("loeschenDatum","2024-02-18");
+    vorgang.put("loeschenDatum","31.03.2002");
     vorgang.put("rechtsgebiet","rechtsgebietValue");
     vorgang.put("register","");
     vorgang.put("zustaendigerSachbearbeiter","zustaendigerSachbearbeiterValue");
@@ -537,19 +550,19 @@ public class ApiVerticleTest {
     personBaseExtended1.put("vorname","vornameantragssteller");
     personBaseExtended1.put("nachname","nachnameantragssteller");
     personBaseExtended1.put("id","idantragssteller");
-    personBaseExtended1.put("geburtsdatum","2002-03-21");
+    personBaseExtended1.put("geburtsdatum","31.03.2002");
     fallAkte1.put("antragssteller", personBaseExtended1);
     JsonObject personBaseExtended2 = new JsonObject();
     personBaseExtended2.put("vorname","vornameleistungsempfaenger");
     personBaseExtended2.put("nachname","nachnameleistungsempfaenger");
     personBaseExtended2.put("id","idleistungsempfaenger");
-    personBaseExtended2.put("geburtsdatum","2002-03-21");
+    personBaseExtended2.put("geburtsdatum","31.03.2002");
     fallAkte1.put("leistungsempfaenger", personBaseExtended2);
     JsonObject personBaseExtended3 = new JsonObject();
     personBaseExtended3.put("vorname","vornameunterhaltspflichtiger");
     personBaseExtended3.put("nachname","nachnameunterhaltspflichtiger");
     personBaseExtended3.put("id","idunterhaltspflichtiger");
-    personBaseExtended3.put("geburtsdatum","2002-03-21");
+    personBaseExtended3.put("geburtsdatum","31.03.2002");
     fallAkte1.put("unterhaltspflichtiger", personBaseExtended3);
     return fallAkte1;
   }
@@ -559,11 +572,11 @@ public class ApiVerticleTest {
     JsonObject vorgang = new JsonObject();
     vorgang.put("aktenzeichen","aktenzeichenValue");
     vorgang.put("archivieren","true");
-    vorgang.put("archivierenDatum","2021-02-18");
+    vorgang.put("archivierenDatum","31.03.2002");
     vorgang.put("bemerkung","bemerkungValue");
     vorgang.put("id","Akte1");
     vorgang.put("loeschen","false");
-    vorgang.put("loeschenDatum","2024-02-18");
+    vorgang.put("loeschenDatum","31.03.2002");
     vorgang.put("rechtsgebiet","rechtsgebietValue");
     vorgang.put("register","Register1");
     vorgang.put("zustaendigerSachbearbeiter","zustaendigerSachbearbeiterValue");
@@ -572,19 +585,19 @@ public class ApiVerticleTest {
     personBaseExtended1.put("vorname","vornameantragssteller");
     personBaseExtended1.put("nachname","nachnameantragssteller");
     personBaseExtended1.put("id","idantragssteller");
-    personBaseExtended1.put("geburtsdatum","2002-03-21");
+    personBaseExtended1.put("geburtsdatum","31.03.2002");
     fallAkte1.put("antragssteller", personBaseExtended1);
     JsonObject personBaseExtended2 = new JsonObject();
     personBaseExtended2.put("vorname","vornameleistungsempfaenger");
     personBaseExtended2.put("nachname","nachnameleistungsempfaenger");
     personBaseExtended2.put("id","idleistungsempfaenger");
-    personBaseExtended2.put("geburtsdatum","2002-03-21");
+    personBaseExtended2.put("geburtsdatum","31.03.2002");
     fallAkte1.put("leistungsempfaenger", personBaseExtended2);
     JsonObject personBaseExtended3 = new JsonObject();
     personBaseExtended3.put("vorname","Fritz");
     personBaseExtended3.put("nachname","Walter");
     personBaseExtended3.put("id","idunterhaltspflichtiger");
-    personBaseExtended3.put("geburtsdatum","2002-03-21");
+    personBaseExtended3.put("geburtsdatum","31.03.2002");
     fallAkte1.put("unterhaltspflichtiger", personBaseExtended3);
     return fallAkte1;
   }
@@ -631,7 +644,7 @@ public class ApiVerticleTest {
   @Test
   void testDokumentFallaktePOSTVorgangID(VertxTestContext testContext) throws Throwable {
     if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
-      System.out.println("start the webclient: testDokumentPOST");
+      System.out.println("start the webclient: testDokumentPOSTVorgangID");
 
       JsonObject dokument = getFallakteDocument("Akte2","");
       MultipartForm form = MultipartForm.create()
@@ -678,20 +691,20 @@ public class ApiVerticleTest {
     dokument.put("Fallakte.Vorgang.Bemerkung","Fallakte.Vorgang.Bemerkung");
     dokument.put("Fallakte.Vorgang.ID",akte);
     dokument.put("Fallakte.Vorgang.Loeschen","Fallakte.Vorgang.Loeschen");
-    dokument.put("Fallakte.Vorgang.LoeschenDatum","Fallakte.Vorgang.LoeschenDatum");
+    dokument.put("Fallakte.Vorgang.LoeschenDatum","15.02.2003");
     dokument.put("Fallakte.Vorgang.Rechtsgebiet","Fallakte.Vorgang.Rechtsgebiet");
     dokument.put("Fallakte.Vorgang.Register",register);
     dokument.put("Fallakte.Vorgang.ZustaendigerSachbearbeiter","Fallakte.Vorgang.ZustaendigerSachbearbeiter");
     dokument.put("Fallakte.Antragssteller.ID","Fallakte.Antragssteller.ID");
-    dokument.put("Fallakte.Antragssteller.Geburtsdatum","Fallakte.Antragssteller.Geburtsdatum");
+    dokument.put("Fallakte.Antragssteller.Geburtsdatum","15.02.2003");
     dokument.put("Fallakte.Antragssteller.Vorname","Fallakte.Antragssteller.Vorname");
     dokument.put("Fallakte.Antragssteller.Nachname","Fallakte.Antragssteller.Nachname");
     dokument.put("Fallakte.Leistungsempfaenger.ID","Fallakte.Leistungsempfaenger.ID");
-    dokument.put("Fallakte.Leistungsempfaenger.Geburtsdatum","Fallakte.Leistungsempfaenger.Geburtsdatum");
+    dokument.put("Fallakte.Leistungsempfaenger.Geburtsdatum","15.02.2003");
     dokument.put("Fallakte.Leistungsempfaenger.Vorname","Fallakte.Leistungsempfaenger.Vorname");
     dokument.put("Fallakte.Leistungsempfaenger.Nachname","Fallakte.Leistungsempfaenger.Nachname");
     dokument.put("Fallakte.Unterhaltspflichtiger.ID","Fallakte.Unterhaltspflichtiger.ID");
-    dokument.put("Fallakte.Unterhaltspflichtiger.Geburtsdatum","Fallakte.Unterhaltspflichtiger.Geburtsdatum");
+    dokument.put("Fallakte.Unterhaltspflichtiger.Geburtsdatum","15.02.2003");
     dokument.put("Fallakte.Unterhaltspflichtiger.Vorname","Fallakte.Unterhaltspflichtiger.Vorname");
     dokument.put("Fallakte.Unterhaltspflichtiger.Nachname","Fallakte.Unterhaltspflichtiger.Nachname");
     dokument.put("Fallakte.OrdnerObjektTypName","Fallakte.OrdnerObjektTypName");
@@ -699,15 +712,15 @@ public class ApiVerticleTest {
     dokument.put("Klientakte.EAktenID","");
     dokument.put("Klientakte.Klient.Adresse","");
     dokument.put("Klientakte.Klient.ID","");
-    dokument.put("Klientakte.Klient.Geburtsdatum","");
+    dokument.put("Klientakte.Klient.Geburtsdatum","15.02.2003");
     dokument.put("Klientakte.Klient.Vorname","");
     dokument.put("Klientakte.Klient.Nachname","Klientakte.Klient.Nachname");
     dokument.put("Klientakte.Archivieren","Klientakte.Archivieren");
-    dokument.put("Klientakte.ArchivierenDatum","Klientakte.ArchivierenDatum");
+    dokument.put("Klientakte.ArchivierenDatum","15.02.2003");
     dokument.put("Klientakte.Loeschen","Klientakte.Loeschen");
-    dokument.put("Klientakte.LoeschenDatum","Klientakte.LoeschenDatum");
+    dokument.put("Klientakte.LoeschenDatum","15.02.2003");
     dokument.put("Klientakte.OrdnerObjektTypName","Klientakte.OrdnerObjektTypName");
-    dokument.put("Dokument.EDokumentenID","012345678901");
+    dokument.put("Dokument.EDokumentenID","");
     dokument.put("Dokument.ErstellungZeitpunkt","2021-02-18");
     dokument.put("Dokument.Typ","Dokument.Typ");
     dokument.put("Dokument.Vorlage","Dokument.Vorlage");
@@ -750,24 +763,24 @@ public class ApiVerticleTest {
     dokument.put("Fallakte.EAktenID","Fallakte.EAktenID");
     dokument.put("Fallakte.Vorgang.Aktenzeichen","Fallakte.Vorgang.Aktenzeichen");
     dokument.put("Fallakte.Vorgang.Archivieren","Fallakte.Vorgang.Archivieren");
-    dokument.put("Fallakte.Vorgang.ArchivierenDatum","Fallakte.Vorgang.ArchivierenDatum");
+    dokument.put("Fallakte.Vorgang.ArchivierenDatum","15.02.2003");
     dokument.put("Fallakte.Vorgang.Bemerkung","Fallakte.Vorgang.Bemerkung");
     dokument.put("Fallakte.Vorgang.ID","Akte2");
     dokument.put("Fallakte.Vorgang.Loeschen","Fallakte.Vorgang.Loeschen");
-    dokument.put("Fallakte.Vorgang.LoeschenDatum","Fallakte.Vorgang.LoeschenDatum");
+    dokument.put("Fallakte.Vorgang.LoeschenDatum","15.02.2003");
     dokument.put("Fallakte.Vorgang.Rechtsgebiet","Fallakte.Vorgang.Rechtsgebiet");
     dokument.put("Fallakte.Vorgang.Register","");
     dokument.put("Fallakte.Vorgang.ZustaendigerSachbearbeiter","Fallakte.Vorgang.ZustaendigerSachbearbeiter");
     dokument.put("Fallakte.Antragssteller.ID","Fallakte.Antragssteller.ID");
-    dokument.put("Fallakte.Antragssteller.Geburtsdatum","Fallakte.Antragssteller.Geburtsdatum");
+    dokument.put("Fallakte.Antragssteller.Geburtsdatum","15.02.2003");
     dokument.put("Fallakte.Antragssteller.Vorname","Fallakte.Antragssteller.Vorname");
     dokument.put("Fallakte.Antragssteller.Nachname","Fallakte.Antragssteller.Nachname");
     dokument.put("Fallakte.Leistungsempfaenger.ID","Fallakte.Leistungsempfaenger.ID");
-    dokument.put("Fallakte.Leistungsempfaenger.Geburtsdatum","Fallakte.Leistungsempfaenger.Geburtsdatum");
+    dokument.put("Fallakte.Leistungsempfaenger.Geburtsdatum","15.02.2003");
     dokument.put("Fallakte.Leistungsempfaenger.Vorname","Fallakte.Leistungsempfaenger.Vorname");
     dokument.put("Fallakte.Leistungsempfaenger.Nachname","Fallakte.Leistungsempfaenger.Nachname");
     dokument.put("Fallakte.Unterhaltspflichtiger.ID","Fallakte.Unterhaltspflichtiger.ID");
-    dokument.put("Fallakte.Unterhaltspflichtiger.Geburtsdatum","Fallakte.Unterhaltspflichtiger.Geburtsdatum");
+    dokument.put("Fallakte.Unterhaltspflichtiger.Geburtsdatum","15.02.2003");
     dokument.put("Fallakte.Unterhaltspflichtiger.Vorname","Fallakte.Unterhaltspflichtiger.Vorname");
     dokument.put("Fallakte.Unterhaltspflichtiger.Nachname","Fallakte.Unterhaltspflichtiger.Nachname");
     dokument.put("Fallakte.OrdnerObjektTypName","Fallakte.OrdnerObjektTypName");
@@ -775,16 +788,16 @@ public class ApiVerticleTest {
     dokument.put("Klientakte.EAktenID","");
     dokument.put("Klientakte.Klient.Adresse","");
     dokument.put("Klientakte.Klient.ID","Klientid");
-    dokument.put("Klientakte.Klient.Geburtsdatum","");
+    dokument.put("Klientakte.Klient.Geburtsdatum","15.02.2003");
     dokument.put("Klientakte.Klient.Vorname","");
     dokument.put("Klientakte.Klient.Nachname","Klientakte.Klient.Nachname");
     dokument.put("Klientakte.Archivieren","Klientakte.Archivieren");
-    dokument.put("Klientakte.ArchivierenDatum","Klientakte.ArchivierenDatum");
+    dokument.put("Klientakte.ArchivierenDatum","15.02.2003");
     dokument.put("Klientakte.Loeschen","Klientakte.Loeschen");
-    dokument.put("Klientakte.LoeschenDatum","Klientakte.LoeschenDatum");
+    dokument.put("Klientakte.LoeschenDatum","15.02.2003");
     dokument.put("Klientakte.OrdnerObjektTypName","Klientakte.OrdnerObjektTypName");
-    dokument.put("Dokument.EDokumentenID","012345678900");
-    dokument.put("Dokument.ErstellungZeitpunkt","2021-02-18");
+    dokument.put("Dokument.EDokumentenID","");
+    dokument.put("Dokument.ErstellungZeitpunkt","15.02.2003");
     dokument.put("Dokument.Typ","Dokument.Typ");
     dokument.put("Dokument.Vorlage","Dokument.Vorlage");
     dokument.put("Dokument.Sachbearbeiter.Kennung","Dokument.Sachbearbeiter.Kennung");

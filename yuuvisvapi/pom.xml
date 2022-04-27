@@ -7,7 +7,7 @@
 
   <groupId>juergenwewer.optimal</groupId>
   <artifactId>yuuvis-v-api</artifactId>
-  <version>3.0.14-SNAPSHOT</version>
+  <version>3.0.18-SNAPSHOT</version>
 
   <properties>
     <dockerrepository>jw-cloud.org:18443</dockerrepository>

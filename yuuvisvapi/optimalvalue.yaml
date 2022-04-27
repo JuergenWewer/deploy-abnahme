@@ -7,4 +7,6 @@ selfsignedcertificate: true
 keystorecn: 10.0.1.51
 keystorepath: yuuviskeystoremacpro.jks
 keystorepassword: secret
+yuuvisusername: prosoz
+yuuvispassword: Freund_$$
 

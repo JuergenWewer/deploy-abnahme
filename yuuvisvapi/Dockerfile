@@ -19,7 +19,7 @@ COPY src/main/resources/dist /src/main/resources/dist
 #COPY src/main/resources/yuuviskeystoremacpro.jks /src/main/resources/yuuviskeystoremacpro.jks
 COPY src/main/resources/yuuviskeystoremacpro.jks /api/yuuviskeystoremacpro.jks
 #RUN chmod 777 /api/yuuviskeystoremacpro.jks
-COPY target/yuuvis-v-api-3.0.14-SNAPSHOT-fat.jar /api/app.jar
+COPY target/yuuvis-v-api-3.0.18-SNAPSHOT-fat.jar /api/app.jar
 
 #USER 1001
 

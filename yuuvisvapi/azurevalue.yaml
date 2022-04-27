@@ -6,3 +6,5 @@ selfsignedcertificate: true
 keystorecn: yuuvisapi.tobbib.com
 keystorepath: yuuviskeystoremacpro.jks
 keystorepassword: secret
+yuuvisusername: prosoz
+yuuvispassword: Freund_$$

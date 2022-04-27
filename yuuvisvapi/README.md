@@ -67,7 +67,7 @@ to build a new version:
 edit version in pom
 mvn clean package
 edit the Dockerfile - put in the version
-mvn clean install
+mvn clean install -DskipTests
 edit the version in api helm - deployment.yaml in the image:
 helm install api --generate-name
 check the service yuuvis-api for the IP -> 30127
@@ -81,9 +81,8 @@ Check the ip adress in:
 pom.xml
 
 edit version in pom
-(sudo) mvn clean install
 edit the Dockerfile - put in the version
-(sudo) mvn clean deploy
+(sudo) mvn clean deploy -DskipTests
 
 
 ###########################################################################
@@ -158,14 +157,14 @@ api/templates/deployment.yaml
 deploy the application:
 
 edit the version in api helm - deployment.yaml in the image:
-helm install -f macprovalue.yaml yuuvis-v-api api
+helm install -f values.yaml yuuvis-v-api api
 helm install -f optimalvalue.yaml yuuvis-v-api api
 
 for testing the syntax:
 helm install -f macprovalue.yaml yuuvis-v-api api --dry-run
 
 ##############################################################################
-helm uninstall yuuvis-v-api -n yuuvis
+helm uninstall yuuvis-v-api
 helm uninstall nexus
 
 ######################################################################
@@ -249,6 +248,8 @@ curl -k -v -u yuuvis:optimalsystem  -X 'GET' 'https://localhost:30036//api/Klien
 curl -k -v -u yuuvis:optimalsystem  -X 'GET' 'https://localhost:443/Health' -H 'accept: application/octet-stream'
 
 curl -k -v -u yuuvis:optimalsystem  -X 'POST' 'https://10.211.55.4:30036//api/Klientakte' -H 'accept: application/octet-stream'
+
+curl -k -v -u prosoz:Freund_$$  -X 'GET' 'https://momentum.osvh.de/api/admin/schema'
 
 ####################################  SSL #####################################
 cd macpro

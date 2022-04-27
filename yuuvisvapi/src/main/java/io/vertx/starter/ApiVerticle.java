@@ -424,7 +424,7 @@ public class ApiVerticle extends AbstractVerticle {
                     .binaryFileUpload(name, fileName, filePath, fileType);
                   client
                     .post(yuuvisport, yuuvisuri, "/api/dms/objects")
-                    .timeout(10000)
+                    .timeout(20000)
                     .putHeader("X-ID-TENANT-NAME", TENANT)
                     .putHeader("content-type", "multipart/form-data")
                     .basicAuthentication(YUUVISUSER, YUUVISPASSWORD)
@@ -494,6 +494,13 @@ public class ApiVerticle extends AbstractVerticle {
             List<String> vorgangID = routingContext.queryParam("vorgangID");
             List<String> vorgangRegister = routingContext.queryParam("vorgangRegister");
             final boolean fallakte;
+            if (klientID.isEmpty() && vorgangID.isEmpty()) {
+              routingContext
+                .response()
+                .setStatusCode(200)
+                .putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+                .end("missing parameter, but ok");
+            }
             if (!klientID.isEmpty()) {
               fallakte = false;
               System.out.println("entered handler by id Dokument_GetDokumente" +
@@ -605,92 +612,7 @@ public class ApiVerticle extends AbstractVerticle {
           JsonObject yuuvisObject = new JsonObject();
           JsonObject properties = new JsonObject();
 
-          JsonObject systemObject = new JsonObject();
-          systemObject.put("value","" + TABLENAME  +  ":" + "fallakteneo");
-          properties.put("system:objectTypeId",systemObject);
-//          JsonObject clientSystem = new JsonObject();
-//          clientSystem.put("value","" + TABLENAME  +  ":" + "fallakteneo");
-//          properties.put("appClientsystem:leadingTypeId", clientSystem);
-//          //vorname, nachname
-//          JsonObject clienttitle = new JsonObject();
-//          clienttitle.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("vorname")+", "+requestBody.getJsonObject("leistungsempfaenger").getString("nachname"));
-//          properties.put("clienttitle",clienttitle);
-//          //gebdatum
-//          JsonObject clientdescription = new JsonObject();
-//          clientdescription.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("geburtsdatum"));
-//          properties.put("clientdescription",clientdescription);
-
-          JsonObject aktenzeichen = new JsonObject();
-          aktenzeichen.put("value",requestBody.getJsonObject("vorgang").getString("aktenzeichen"));
-          properties.put("aktenzeichen",aktenzeichen);
-          JsonObject eaktenid = new JsonObject();
-          eaktenid.put("value",requestBody.getString("eAktenID"));
-          properties.put("eaktenid",eaktenid);
-          JsonObject sachbearbeiter = new JsonObject();
-          sachbearbeiter.put("value",requestBody.getJsonObject("vorgang").getString("zustaendigerSachbearbeiter"));
-          properties.put("sachbearbeiter",sachbearbeiter);
-          JsonObject vorgangsid = new JsonObject();
-          vorgangsid.put("value",requestBody.getJsonObject("vorgang").getString("id"));
-          properties.put("vorgangsid",vorgangsid);
-          if (!requestBody.getJsonObject("vorgang").getString("register").isEmpty()) {
-            JsonObject register = new JsonObject();
-            register.put("value", requestBody.getJsonObject("vorgang").getString("register"));
-            properties.put("register", register);
-          }
-          JsonObject rechtsgebiet = new JsonObject();
-          rechtsgebiet.put("value",requestBody.getJsonObject("vorgang").getString("rechtsgebiet"));
-          properties.put("rechtsgebiet",rechtsgebiet);
-          JsonObject vorname = new JsonObject();
-          vorname.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("vorname"));
-          properties.put("vorname",vorname);
-          JsonObject nachname = new JsonObject();
-          nachname.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("nachname"));
-          properties.put("nachname",nachname);
-          JsonObject geburtsdatum = new JsonObject();
-          geburtsdatum.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("geburtsdatum"));
-          properties.put("geburtsdatum",geburtsdatum);
-          JsonObject id = new JsonObject();
-          id.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("id"));
-          properties.put("id",id);
-          JsonObject vornameAntragsteller = new JsonObject();
-          vornameAntragsteller.put("value",requestBody.getJsonObject("antragssteller").getString("vorname"));
-          properties.put("vornameAntragsteller",vornameAntragsteller);
-          JsonObject nachnameAntragsteller = new JsonObject();
-          nachnameAntragsteller.put("value",requestBody.getJsonObject("antragssteller").getString("nachname"));
-          properties.put("nachnameAntragsteller",nachnameAntragsteller);
-          JsonObject geburtsdatumAntragsteller = new JsonObject();
-          geburtsdatumAntragsteller.put("value",requestBody.getJsonObject("antragssteller").getString("geburtsdatum"));
-          properties.put("geburtsdatumAntragsteller",geburtsdatumAntragsteller);
-          JsonObject idAntragsteller = new JsonObject();
-          idAntragsteller.put("value",requestBody.getJsonObject("antragssteller").getString("id"));
-          properties.put("idAntragsteller",idAntragsteller);
-          JsonObject vornameUnterhaltspflichtiger = new JsonObject();
-          vornameUnterhaltspflichtiger.put("value",requestBody.getJsonObject("unterhaltspflichtiger").getString("vorname"));
-          properties.put("vornameUnterhaltspflichtiger",vornameUnterhaltspflichtiger);
-          JsonObject nachnameUnterhaltspflichtiger = new JsonObject();
-          nachnameUnterhaltspflichtiger.put("value",requestBody.getJsonObject("unterhaltspflichtiger").getString("nachname"));
-          properties.put("nachnameUnterhaltspflichtiger",nachnameUnterhaltspflichtiger);
-          JsonObject geburtsdatumUnterhaltspflichtiger = new JsonObject();
-          geburtsdatumUnterhaltspflichtiger.put("value",requestBody.getJsonObject("unterhaltspflichtiger").getString("geburtsdatum"));
-          properties.put("geburtsdatumUnterhaltspflichtiger",geburtsdatumUnterhaltspflichtiger);
-          JsonObject idUnterhaltspflichtiger = new JsonObject();
-          idUnterhaltspflichtiger.put("value",requestBody.getJsonObject("unterhaltspflichtiger").getString("id"));
-          properties.put("idUnterhaltspflichtiger",idUnterhaltspflichtiger);
-          JsonObject archivdatum = new JsonObject();
-          archivdatum.put("value",requestBody.getJsonObject("vorgang").getString("archivierenDatum"));
-          properties.put("archivdatum",archivdatum);
-          JsonObject loeschdatum = new JsonObject();
-          loeschdatum.put("value",requestBody.getJsonObject("vorgang").getString("loeschenDatum"));
-          properties.put("loeschdatum",loeschdatum);
-          JsonObject archivieren = new JsonObject();
-          archivieren.put("value",requestBody.getJsonObject("vorgang").getString("archivieren"));
-          properties.put("archivieren",archivieren);
-          JsonObject loeschen = new JsonObject();
-          loeschen.put("value",requestBody.getJsonObject("vorgang").getString("loeschen"));
-          properties.put("loeschen",loeschen);
-          JsonObject Bemerkung = new JsonObject();
-          Bemerkung.put("value",requestBody.getJsonObject("vorgang").getString("bemerkung"));
-          properties.put("Bemerkung",Bemerkung);
+          getFallAkteProperties(requestBody, properties);
 
           yuuvisObject.put("properties",properties);
           yuuvisObjects.add(yuuvisObject);
@@ -731,11 +653,22 @@ public class ApiVerticle extends AbstractVerticle {
                     HttpResponse<Buffer> response = ar;
                     System.out.println("Received yuuvis response with status code: " + response.statusCode() + " " + response.statusMessage());
                     System.out.println("Received yuuvis response with body: " + response.bodyAsString());
-                    routingContext
-                      .response()
-                      .setStatusCode(200)
-                      .putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
-                      .end(requestBody.encode()); // <4>
+                    if (setEaktenID(requestBody, response)) {
+                      System.out.println("responseBody: " + requestBody);
+                      routingContext
+                        .response()
+                        .setStatusCode(200)
+                        .putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+                        .end(requestBody.encode());
+                    } else {
+                      System.out.println("did not receive an objectId from yuuvi");
+                      System.out.println("responseBody: " + requestBody);
+                      routingContext
+                        .response()
+                        .setStatusCode(500)
+                        .putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+                        .end(requestBody.encode());
+                    }
                   })
                   .onFailure(err -> {
                     System.out.println("Something went wrong " + err.getMessage());
@@ -781,77 +714,8 @@ public class ApiVerticle extends AbstractVerticle {
             systemObject.put("value","" + TABLENAME  +  ":" + "fallakteneo");
             properties.put("system:objectTypeId",systemObject);
 
-            JsonObject aktenzeichen = new JsonObject();
-            aktenzeichen.put("value",requestBody.getJsonObject("vorgang").getString("aktenzeichen"));
-            properties.put("aktenzeichen",aktenzeichen);
-            JsonObject eaktenid = new JsonObject();
-            eaktenid.put("value",requestBody.getString("eAktenID"));
-            properties.put("eaktenid",eaktenid);
-            JsonObject sachbearbeiter = new JsonObject();
-            sachbearbeiter.put("value",requestBody.getJsonObject("vorgang").getString("zustaendigerSachbearbeiter"));
-            properties.put("sachbearbeiter",sachbearbeiter);
-            JsonObject vorgangsid = new JsonObject();
-            vorgangsid.put("value",requestBody.getJsonObject("vorgang").getString("id"));
-            properties.put("vorgangsid",vorgangsid);
-            if (!requestBody.getJsonObject("vorgang").getString("register").isEmpty()) {
-              JsonObject register = new JsonObject();
-              register.put("value", requestBody.getJsonObject("vorgang").getString("register"));
-              properties.put("register", register);
-            }
-            JsonObject rechtsgebiet = new JsonObject();
-            rechtsgebiet.put("value",requestBody.getJsonObject("vorgang").getString("rechtsgebiet"));
-            properties.put("rechtsgebiet",rechtsgebiet);
-            JsonObject vorname = new JsonObject();
-            vorname.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("vorname"));
-            properties.put("vorname",vorname);
-            JsonObject nachname = new JsonObject();
-            nachname.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("nachname"));
-            properties.put("nachname",nachname);
-            JsonObject geburtsdatum = new JsonObject();
-            geburtsdatum.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("geburtsdatum"));
-            properties.put("geburtsdatum",geburtsdatum);
-            JsonObject id = new JsonObject();
-            id.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("id"));
-            properties.put("id",id);
-            JsonObject vornameAntragsteller = new JsonObject();
-            vornameAntragsteller.put("value",requestBody.getJsonObject("antragssteller").getString("vorname"));
-            properties.put("vornameAntragsteller",vornameAntragsteller);
-            JsonObject nachnameAntragsteller = new JsonObject();
-            nachnameAntragsteller.put("value",requestBody.getJsonObject("antragssteller").getString("nachname"));
-            properties.put("nachnameAntragsteller",nachnameAntragsteller);
-            JsonObject geburtsdatumAntragsteller = new JsonObject();
-            geburtsdatumAntragsteller.put("value",requestBody.getJsonObject("antragssteller").getString("geburtsdatum"));
-            properties.put("geburtsdatumAntragsteller",geburtsdatumAntragsteller);
-            JsonObject idAntragsteller = new JsonObject();
-            idAntragsteller.put("value",requestBody.getJsonObject("antragssteller").getString("id"));
-            properties.put("idAntragsteller",idAntragsteller);
-            JsonObject vornameUnterhaltspflichtiger = new JsonObject();
-            vornameUnterhaltspflichtiger.put("value",requestBody.getJsonObject("unterhaltspflichtiger").getString("vorname"));
-            properties.put("vornameUnterhaltspflichtiger",vornameUnterhaltspflichtiger);
-            JsonObject nachnameUnterhaltspflichtiger = new JsonObject();
-            nachnameUnterhaltspflichtiger.put("value",requestBody.getJsonObject("unterhaltspflichtiger").getString("nachname"));
-            properties.put("nachnameUnterhaltspflichtiger",nachnameUnterhaltspflichtiger);
-            JsonObject geburtsdatumUnterhaltspflichtiger = new JsonObject();
-            geburtsdatumUnterhaltspflichtiger.put("value",requestBody.getJsonObject("unterhaltspflichtiger").getString("geburtsdatum"));
-            properties.put("geburtsdatumUnterhaltspflichtiger",geburtsdatumUnterhaltspflichtiger);
-            JsonObject idUnterhaltspflichtiger = new JsonObject();
-            idUnterhaltspflichtiger.put("value",requestBody.getJsonObject("unterhaltspflichtiger").getString("id"));
-            properties.put("idUnterhaltspflichtiger",idUnterhaltspflichtiger);
-            JsonObject archivdatum = new JsonObject();
-            archivdatum.put("value",requestBody.getJsonObject("vorgang").getString("archivierenDatum"));
-            properties.put("archivdatum",archivdatum);
-            JsonObject loeschdatum = new JsonObject();
-            loeschdatum.put("value",requestBody.getJsonObject("vorgang").getString("loeschenDatum"));
-            properties.put("loeschdatum",loeschdatum);
-            JsonObject archivieren = new JsonObject();
-            archivieren.put("value",requestBody.getJsonObject("vorgang").getString("archivieren"));
-            properties.put("archivieren",archivieren);
-            JsonObject loeschen = new JsonObject();
-            loeschen.put("value",requestBody.getJsonObject("vorgang").getString("loeschen"));
-            properties.put("loeschen",loeschen);
-            JsonObject Bemerkung = new JsonObject();
-            Bemerkung.put("value",requestBody.getJsonObject("vorgang").getString("bemerkung"));
-            properties.put("Bemerkung",Bemerkung);
+            getFallAkteProperties(requestBody, properties);
+
 
             yuuvisObject.put("properties",properties);
             yuuvisObjects.add(yuuvisObject);
@@ -896,11 +760,22 @@ public class ApiVerticle extends AbstractVerticle {
                       HttpResponse<Buffer> response = ar;
                       System.out.println("Received yuuvis response with status code: " + response.statusCode() + " " + response.statusMessage());
                       System.out.println("Received yuuvis response with body: " + response.bodyAsString());
-                      routingContext
-                        .response()
-                        .setStatusCode(200)
-                        .putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
-                        .end(requestBody.encode()); // <4>
+                      if (setEaktenID(requestBody, response)) {
+                        System.out.println("responseBody: " + requestBody);
+                        routingContext
+                          .response()
+                          .setStatusCode(200)
+                          .putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+                          .end(requestBody.encode());
+                      } else {
+                        System.out.println("did not receive an objectId from yuuvi");
+                        System.out.println("responseBody: " + requestBody);
+                        routingContext
+                          .response()
+                          .setStatusCode(500)
+                          .putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+                          .end(requestBody.encode());
+                      }
                     })
                     .onFailure(err -> {
                       System.out.println("Something went wrong " + err.getMessage());
@@ -960,7 +835,7 @@ public class ApiVerticle extends AbstractVerticle {
                 JsonObject searchProperties = yuuvisSearchObject.getJsonObject("properties");
 
                 JsonObject fallAkte = new JsonObject();
-                fallAkte.put("eAktenID","");
+                fallAkte.put("eAktenID",getObjectId(responseQuery));
                 JsonObject vorgang = new JsonObject();
                 vorgang.put("aktenzeichen",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "aktenzeichen").getString("value"));
                 vorgang.put("archivieren",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "archivieren").getString("value"));
@@ -1003,7 +878,7 @@ public class ApiVerticle extends AbstractVerticle {
                 routingContext
                   .response() // <1>
                   .setStatusCode(204)
-                  .putHeader(HttpHeaders.CONTENT_TYPE, "text") // <2>
+                  .putHeader(HttpHeaders.CONTENT_TYPE, "application/octet-stream") // <2>
                   .end("search result not unique found: " + results); // <3>
               }
             })
@@ -1063,11 +938,23 @@ public class ApiVerticle extends AbstractVerticle {
                       HttpResponse<Buffer> response = ar;
                       System.out.println("Received yuuvis response with status code: " + response.statusCode() + " " + response.statusMessage());
                       System.out.println("Received yuuvis response with body: " + response.bodyAsString());
-                      routingContext
-                        .response()
-                        .setStatusCode(200)
-                        .putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
-                        .end(requestBody.encode()); // <4>
+
+                      if (setEaktenID(requestBody, response)) {
+                        System.out.println("responseBody: " + requestBody);
+                        routingContext
+                          .response()
+                          .setStatusCode(200)
+                          .putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+                          .end(requestBody.encode());
+                      } else {
+                        System.out.println("did not receive an objectId from yuuvi");
+                        System.out.println("responseBody: " + requestBody);
+                        routingContext
+                          .response()
+                          .setStatusCode(500)
+                          .putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+                          .end(requestBody.encode());
+                      }
                     })
                     .onFailure(err -> {
                       System.out.println("Something went wrong " + err.getMessage());
@@ -1145,11 +1032,23 @@ public class ApiVerticle extends AbstractVerticle {
                       HttpResponse<Buffer> response = ar;
                       System.out.println("Received yuuvis response with status code: " + response.statusCode() + " " + response.statusMessage());
                       System.out.println("Received yuuvis response with body: " + response.bodyAsString());
-                      routingContext
-                        .response()
-                        .setStatusCode(200)
-                        .putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
-                        .end(response.bodyAsString()); // <4>
+
+                      if (setEaktenID(requestBody, response)) {
+                        System.out.println("responseBody: " + requestBody);
+                        routingContext
+                          .response()
+                          .setStatusCode(200)
+                          .putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+                          .end(requestBody.encode());
+                      } else {
+                        System.out.println("did not receive an objectId from yuuvi");
+                        System.out.println("responseBody: " + requestBody);
+                        routingContext
+                          .response()
+                          .setStatusCode(500)
+                          .putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+                          .end(requestBody.encode());
+                      }
                     })
                     .onFailure(err -> {
                       System.out.println("Something went wrong " + err.getMessage());
@@ -1176,7 +1075,7 @@ public class ApiVerticle extends AbstractVerticle {
         // tag::Klientakte_Get[]
         routerBuilder.operation("Klientakte_Get").handler(routingContext -> {
           String param = routingContext.pathParam("klientId");
-          System.out.println("entered handler by id Dokument_Get eDokumentenID: " + param);
+          System.out.println("entered handler by id Klientakte_Get klientId: " + param);
           JsonObject yuuvisQuery = new JsonObject();
 //          if (fallakte) {
 //            if (requestBody.getString("Fallakte.Vorgang.Register").isEmpty()) {
@@ -1211,7 +1110,7 @@ public class ApiVerticle extends AbstractVerticle {
                 JsonObject searchProperties = yuuvisSearchObject.getJsonObject("properties");
 
                 JsonObject klientAkte = new JsonObject();
-                klientAkte.put("eAktenID","");
+                klientAkte.put("eAktenID",getObjectId(responseQuery));
                 JsonObject klient = new JsonObject();
                 klient.put("vorname",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "vorname").getString("value"));
                 klient.put("nachname",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "nachname").getString("value"));
@@ -1233,7 +1132,7 @@ public class ApiVerticle extends AbstractVerticle {
                 routingContext
                   .response() // <1>
                   .setStatusCode(204)
-                  .putHeader(HttpHeaders.CONTENT_TYPE, "text") // <2>
+                  .putHeader(HttpHeaders.CONTENT_TYPE, "application/octet-stream") // <2>
                   .end("search result not unique found: " + results); // <3>
               }
               })
@@ -1450,33 +1349,188 @@ public class ApiVerticle extends AbstractVerticle {
       .onFailure(startPromise::fail);
   }
 
+  private void getFallAkteProperties(JsonObject requestBody, JsonObject properties) {
+    JsonObject systemObject = new JsonObject();
+    systemObject.put("value","" + TABLENAME  +  ":" + "fallakteneo");
+    properties.put("system:objectTypeId",systemObject);
+    JsonObject clienttitle = new JsonObject();
+    clienttitle.put("value", "ClientTitle");
+    properties.put("appClient:clienttitle", clienttitle);
+    JsonObject clientdescription = new JsonObject();
+    clientdescription.put("value", "clientDescription");
+    properties.put("appClient:clientdescription", clientdescription);
+//          JsonObject clientSystem = new JsonObject();
+//          clientSystem.put("value","" + TABLENAME  +  ":" + "fallakteneo");
+//          properties.put("appClientsystem:leadingTypeId", clientSystem);
+
+    JsonObject aktenzeichen = new JsonObject();
+    aktenzeichen.put("value", requestBody.getJsonObject("vorgang").getString("aktenzeichen"));
+    properties.put("aktenzeichen",aktenzeichen);
+    JsonObject eaktenid = new JsonObject();
+    eaktenid.put("value", requestBody.getString("eAktenID"));
+    properties.put("eaktenid",eaktenid);
+    JsonObject sachbearbeiter = new JsonObject();
+    sachbearbeiter.put("value", requestBody.getJsonObject("vorgang").getString("zustaendigerSachbearbeiter"));
+    properties.put("sachbearbeiter",sachbearbeiter);
+    JsonObject vorgangsid = new JsonObject();
+    vorgangsid.put("value", requestBody.getJsonObject("vorgang").getString("id"));
+    properties.put("vorgangsid",vorgangsid);
+    if (!requestBody.getJsonObject("vorgang").getString("register").isEmpty()) {
+      JsonObject register = new JsonObject();
+      register.put("value", requestBody.getJsonObject("vorgang").getString("register"));
+      properties.put("register", register);
+    }
+    JsonObject rechtsgebiet = new JsonObject();
+    rechtsgebiet.put("value", requestBody.getJsonObject("vorgang").getString("rechtsgebiet"));
+    properties.put("rechtsgebiet",rechtsgebiet);
+    JsonObject vorname = new JsonObject();
+    vorname.put("value", requestBody.getJsonObject("leistungsempfaenger").getString("vorname"));
+    properties.put("vorname",vorname);
+    JsonObject nachname = new JsonObject();
+    nachname.put("value", requestBody.getJsonObject("leistungsempfaenger").getString("nachname"));
+    properties.put("nachname",nachname);
+    JsonObject geburtsdatum = new JsonObject();
+
+    String dateFormatted = getFormattedDate(requestBody.getJsonObject("leistungsempfaenger").getString("geburtsdatum"));
+
+    geburtsdatum.put("value", dateFormatted);
+    properties.put("geburtsdatum",geburtsdatum);
+    JsonObject id = new JsonObject();
+    id.put("value", requestBody.getJsonObject("leistungsempfaenger").getString("id"));
+    properties.put("id",id);
+    JsonObject vornameAntragsteller = new JsonObject();
+    vornameAntragsteller.put("value", requestBody.getJsonObject("antragssteller").getString("vorname"));
+    properties.put("vornameAntragsteller",vornameAntragsteller);
+    JsonObject nachnameAntragsteller = new JsonObject();
+    nachnameAntragsteller.put("value", requestBody.getJsonObject("antragssteller").getString("nachname"));
+    properties.put("nachnameAntragsteller",nachnameAntragsteller);
+    JsonObject geburtsdatumAntragsteller = new JsonObject();
+
+    String dateFormatted2 = getFormattedDate(requestBody.getJsonObject("antragssteller").getString("geburtsdatum"));
+
+    geburtsdatumAntragsteller.put("value", dateFormatted2);
+    properties.put("geburtsdatumAntragsteller",geburtsdatumAntragsteller);
+    JsonObject idAntragsteller = new JsonObject();
+    idAntragsteller.put("value", requestBody.getJsonObject("antragssteller").getString("id"));
+    properties.put("idAntragsteller",idAntragsteller);
+    JsonObject vornameUnterhaltspflichtiger = new JsonObject();
+    vornameUnterhaltspflichtiger.put("value", requestBody.getJsonObject("unterhaltspflichtiger").getString("vorname"));
+    properties.put("vornameUnterhaltspflichtiger",vornameUnterhaltspflichtiger);
+    JsonObject nachnameUnterhaltspflichtiger = new JsonObject();
+    nachnameUnterhaltspflichtiger.put("value", requestBody.getJsonObject("unterhaltspflichtiger").getString("nachname"));
+    properties.put("nachnameUnterhaltspflichtiger",nachnameUnterhaltspflichtiger);
+    JsonObject geburtsdatumUnterhaltspflichtiger = new JsonObject();
+
+    String dateFormatted3 = getFormattedDate(requestBody.getJsonObject("unterhaltspflichtiger").getString("geburtsdatum"));
+
+    geburtsdatumUnterhaltspflichtiger.put("value", dateFormatted3);
+    properties.put("geburtsdatumUnterhaltspflichtiger",geburtsdatumUnterhaltspflichtiger);
+    JsonObject idUnterhaltspflichtiger = new JsonObject();
+    idUnterhaltspflichtiger.put("value", requestBody.getJsonObject("unterhaltspflichtiger").getString("id"));
+    properties.put("idUnterhaltspflichtiger",idUnterhaltspflichtiger);
+    JsonObject archivdatum = new JsonObject();
+
+    String dateFormatted4 = getFormattedDate(requestBody.getJsonObject("vorgang").getString("archivierenDatum"));
+
+    archivdatum.put("value", dateFormatted4);
+    properties.put("archivdatum",archivdatum);
+    JsonObject loeschdatum = new JsonObject();
+
+    String dateFormatted5 = getFormattedDate(requestBody.getJsonObject("vorgang").getString("loeschenDatum"));
+
+    loeschdatum.put("value", dateFormatted5);
+    properties.put("loeschdatum",loeschdatum);
+    JsonObject archivieren = new JsonObject();
+    archivieren.put("value", requestBody.getJsonObject("vorgang").getString("archivieren"));
+    properties.put("archivieren",archivieren);
+    JsonObject loeschen = new JsonObject();
+    loeschen.put("value", requestBody.getJsonObject("vorgang").getString("loeschen"));
+    properties.put("loeschen",loeschen);
+    JsonObject Bemerkung = new JsonObject();
+    Bemerkung.put("value", requestBody.getJsonObject("vorgang").getString("bemerkung"));
+    properties.put("Bemerkung",Bemerkung);
+  }
+
+  private String getFormattedDate(String  dateInput) {
+    String dateFormatted = "";
+    if (dateInput != null) {
+      String[] dateArray = dateInput.split("\\.");
+      if (dateArray != null && dateArray.length == 3) {
+        dateFormatted = dateArray[2] + "-" + dateArray[1] + "-" + dateArray[0];
+      } else {
+        dateFormatted = "1970-01-01";
+      }
+    } else {
+      dateFormatted = "1970-01-01";
+    }
+    return dateFormatted;
+  }
+
+  private boolean setEaktenID(JsonObject requestBody, HttpResponse<Buffer> response) {
+    return setFieldId("eaktenID", requestBody, response);
+  }
+
+  private boolean setFieldId(String field ,JsonObject requestBody, HttpResponse<Buffer> response) {
+    String objectID = getObjectId(response);
+    requestBody.put(field, objectID);
+    if (objectID != null ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  private String getObjectId(HttpResponse<Buffer> response) {
+    if (response != null &&
+      response.bodyAsJsonObject() != null &&
+      response.bodyAsJsonObject().getJsonArray("objects") != null &&
+      response.bodyAsJsonObject().getJsonArray("objects").getJsonObject(0) != null &&
+      response.bodyAsJsonObject().getJsonArray("objects").getJsonObject(0).getJsonObject("properties") != null &&
+      response.bodyAsJsonObject().getJsonArray("objects").getJsonObject(0).getJsonObject("properties").getJsonObject("system:objectId") != null &&
+      response.bodyAsJsonObject().getJsonArray("objects").getJsonObject(0).getJsonObject("properties").getJsonObject("system:objectId").getString("value") != null) {
+      return response.bodyAsJsonObject().getJsonArray("objects").getJsonObject(0).getJsonObject("properties").getJsonObject("system:objectId").getString("value");
+    } else {
+      return "";
+    }
+  }
+
   private void getKlientAkteProperties(JsonObject requestBody, JsonObject properties) {
     JsonObject systemObject = new JsonObject();
     systemObject.put("value","" + TABLENAME  +  ":" + "klientakteneo");
     properties.put("system:objectTypeId",systemObject);
+    JsonObject clienttitle = new JsonObject();
+    clienttitle.put("value", "ClientTitle");
+    properties.put("appClient:clienttitle", clienttitle);
+    JsonObject clientdescription = new JsonObject();
+    clientdescription.put("value", "clientDescription");
+    properties.put("appClient:clientdescription", clientdescription);
     JsonObject vorname = new JsonObject();
-    vorname.put("value",requestBody.getString("vorname"));
+    vorname.put("value",requestBody.getJsonObject("klient").getString("vorname"));
     properties.put("vorname",vorname);
     JsonObject nachname = new JsonObject();
-    nachname.put("value",requestBody.getString("nachname"));
+    nachname.put("value",requestBody.getJsonObject("klient").getString("nachname"));
     properties.put("nachname",nachname);
     JsonObject id = new JsonObject();
-    id.put("value",requestBody.getString("id"));
+    id.put("value",requestBody.getJsonObject("klient").getString("id"));
     properties.put("id",id);
     JsonObject geburtsdatum = new JsonObject();
-    geburtsdatum.put("value",requestBody.getString("geburtsdatum"));
+
+    String dateFormatted = getFormattedDate(requestBody.getJsonObject("klient").getString("geburtsdatum"));
+
+    geburtsdatum.put("value",dateFormatted);
     properties.put("geburtsdatum",geburtsdatum);
     JsonObject adresse = new JsonObject();
-    adresse.put("value",requestBody.getString("adresse"));
+    adresse.put("value",requestBody.getJsonObject("klient").getString("adresse"));
     properties.put("adresse",adresse);
-    JsonObject vornameUnterhaltspflichtiger = new JsonObject();
-    vornameUnterhaltspflichtiger.put("value",requestBody.getString("vornameUnterhaltspflichtiger"));
-    properties.put("vornameUnterhaltspflichtiger",vornameUnterhaltspflichtiger);
+
     JsonObject archivdatum = new JsonObject();
-    archivdatum.put("value",requestBody.getString("archivdatum"));
+    String dateFormatted1 = getFormattedDate(requestBody.getString("archivdatum"));
+    archivdatum.put("value",dateFormatted1);
     properties.put("archivdatum",archivdatum);
     JsonObject loeschdatum = new JsonObject();
-    loeschdatum.put("value",requestBody.getString("loeschdatum"));
+
+    String dateFormatted2 = getFormattedDate(requestBody.getString("loeschdatum"));
+    loeschdatum.put("value",dateFormatted2);
     properties.put("loeschdatum",loeschdatum);
     JsonObject archivieren = new JsonObject();
     archivieren.put("value",requestBody.getString("archivieren"));
@@ -1512,7 +1566,7 @@ public class ApiVerticle extends AbstractVerticle {
       JsonObject yuuvisSearchObject = yuuvisSearchObjects.getJsonObject(i);
       JsonObject searchProperties = yuuvisSearchObject.getJsonObject("properties");
 
-      yuuvisObject.put("eDokumentenID",searchProperties.getJsonObject("tenYuuvistest:edokumentenid").getString("value"));
+      yuuvisObject.put("eDokumentenID",searchProperties.getJsonObject("system:objectId").getString("value"));
       yuuvisObject.put("erstellungZeitpunkt",searchProperties.getJsonObject("tenYuuvistest:erstelldatum").getString("value"));
       yuuvisObject.put("typ",searchProperties.getJsonObject("tenYuuvistest:dokumenttyp").getString("value"));
       yuuvisObject.put("vorlage",searchProperties.getJsonObject("tenYuuvistest:vorlage").getString("value"));
@@ -1575,13 +1629,13 @@ public class ApiVerticle extends AbstractVerticle {
     systemparentId.put("value", folderID);
     properties.put("system:parentId", systemparentId);
 //    //vorname, nachname
-//    JsonObject clienttitle = new JsonObject();
-//    clienttitle.put("value", requestBody.getString("Dokument.Sachbearbeiter.Vorname") + ", " + requestBody.getString("Dokument.Sachbearbeiter.Nachname"));
-//    properties.put("clienttitle", clienttitle);
-//    //prosozDateiname
-//    JsonObject clientdescription = new JsonObject();
-//    clientdescription.put("value", requestBody.getString("Dokument.ProsozDateiname"));
-//    properties.put("clientdescription", clientdescription);
+    JsonObject clienttitle = new JsonObject();
+    clienttitle.put("value", "clienttitle");
+    properties.put("clienttitle", clienttitle);
+    //prosozDateiname
+    JsonObject clientdescription = new JsonObject();
+    clientdescription.put("value", "clientdescription");
+    properties.put("clientdescription", clientdescription);
 
     JsonObject edokumentenid = new JsonObject();
     edokumentenid.put("value",  requestBody.getString("Dokument.EDokumentenID"));
@@ -1603,7 +1657,10 @@ public class ApiVerticle extends AbstractVerticle {
     JsonObject erstelldatum = new JsonObject();
 //                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
 //                String erstelldatumTime = sdf.format(System.currentTimeMillis());
-    erstelldatum.put("value", requestBody.getString("Dokument.ErstellungZeitpunkt"));
+
+    String dateFormatted = getFormattedDate(requestBody.getString("Dokument.ErstellungZeitpunkt"));
+
+    erstelldatum.put("value", dateFormatted);
     properties.put("erstelldatum", erstelldatum);
 
     JsonObject vornamesachbearbeiter = new JsonObject();
@@ -1666,13 +1723,13 @@ public class ApiVerticle extends AbstractVerticle {
     systemparentId.put("value", folderID);
     properties.put("system:parentId", systemparentId);
 //    //vorname, nachname
-//    JsonObject clienttitle = new JsonObject();
-//    clienttitle.put("value", requestBody.getString("Dokument.Sachbearbeiter.Vorname") + ", " + requestBody.getString("Dokument.Sachbearbeiter.Nachname"));
-//    properties.put("clienttitle", clienttitle);
-//    //prosozDateiname
-//    JsonObject clientdescription = new JsonObject();
-//    clientdescription.put("value", requestBody.getString("Dokument.ProsozDateiname"));
-//    properties.put("clientdescription", clientdescription);
+    JsonObject clienttitle = new JsonObject();
+    clienttitle.put("value", "clienttitle");
+    properties.put("clienttitle", clienttitle);
+    //prosozDateiname
+    JsonObject clientdescription = new JsonObject();
+    clientdescription.put("value", "clientdescription");
+    properties.put("clientdescription", clientdescription);
 
     JsonObject edokumentenid = new JsonObject();
     edokumentenid.put("value",  requestBody.getString("Dokument.EDokumentenID"));
@@ -1694,7 +1751,9 @@ public class ApiVerticle extends AbstractVerticle {
     JsonObject erstelldatum = new JsonObject();
 //                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
 //                String erstelldatumTime = sdf.format(System.currentTimeMillis());
-    erstelldatum.put("value", requestBody.getString("Dokument.ErstellungZeitpunkt"));
+
+    String dateFormatted = getFormattedDate(requestBody.getString("Dokument.ErstellungZeitpunkt"));
+    erstelldatum.put("value", dateFormatted);
     properties.put("erstelldatum", erstelldatum);
 
     JsonObject vornamesachbearbeiter = new JsonObject();
