@@ -57,6 +57,6 @@ spec:
             name: csi-raid-configmap
         - name: ssh-keys-v
           secret:
-            secretName: csiraidsecret-key
+            secretName: "{{.Values.csiraid.nfs.secret}}"
             defaultMode: 0600
 
