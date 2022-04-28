@@ -173,5 +173,6 @@ securityContext: {}
 
 csiraid:
   nfs:
-    server: 192.168.178.77
+    server: 192.168.178.91
     secret: csiraidsecret-key
+    backup: false
