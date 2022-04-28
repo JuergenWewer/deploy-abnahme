@@ -21,7 +21,7 @@ spec:
       serviceAccountName: csi-raid
       containers:
         - name: csi-raid
-          image: jw-cloud.org:8443/csi-raid:v0.0.41
+          image: jw-cloud.org:8443/csi-raid:v0.0.38
           volumeMounts:
             - name: nfs-client-root
               mountPath: /persistentvolumes
